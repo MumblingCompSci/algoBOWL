@@ -1,4 +1,6 @@
 #include <iostream>
+#include "task.h"
+#include "Workstation.h"
 using namespace std;
 
 int main() {

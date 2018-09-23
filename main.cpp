@@ -4,6 +4,7 @@
 using namespace std;
 
 int main() {
-    cout << "Hello, World!" << std::endl;
+    int current_time = 0;
+
     return 0;
 }

@@ -10,11 +10,14 @@ using namespace std;
 
 class Task {
 public:
-    int run_times [3];
-    int call_times[3];
+    int * run_times;
+    int * call_times;
     int available_time;
 
     string print();
+
+    Task(int available_time, int run_times[]);
+    ~Task();
 };
 
 

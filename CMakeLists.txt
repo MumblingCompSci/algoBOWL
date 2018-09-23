@@ -3,4 +3,4 @@ project(algoBowl)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(algoBowl main.cpp task.cpp task.h)
+add_executable(algoBowl main.cpp task.cpp task.h Workstation.cpp Workstation.h)

@@ -8,7 +8,7 @@
 #include <string>
 using namespace std;
 
-class task {
+class Task {
 public:
     int run_times [3];
     int call_times[3];

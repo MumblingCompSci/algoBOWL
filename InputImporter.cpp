@@ -4,6 +4,13 @@
 
 #include "InputImporter.h"
 
-void InputImporter::loadTasks(string file_name, Task *tasks_array) {
-    
+static void InputImporter::loadTasks(string file_name, Task *tasks_array) {
+    // load the file
+
+    // read the number of tasks
+
+    // make the array *
+
+    // load the tasks into the array
+
 }

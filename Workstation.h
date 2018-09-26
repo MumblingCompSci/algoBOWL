@@ -11,8 +11,11 @@ using namespace std;
 class Workstation {
 public:
     int cumulative_time;
+    Task currentTask;
+    bool done;
 
     Workstation();
+    ~Workstation();
     void getTask(Task newTask);
 
 };

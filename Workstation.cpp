@@ -3,3 +3,16 @@
 //
 
 #include "Workstation.h"
+
+Workstation::Workstation() {
+    cumulative_time = 0;
+    done = false;
+}
+
+Workstation::~Workstation() {
+
+}
+
+void Workstation::getTask(Task newTask) {
+
+}

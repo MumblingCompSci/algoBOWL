@@ -5,14 +5,21 @@
 #include "Workstation.h"
 
 Workstation::Workstation() {
-    cumulative_time = 0;
-    done = false;
+    cumulativeTime = 0;
+    numTasksPerformed = 0;
+    wsNumber = -1;
+}
+
+Workstation::Workstation(int wsNumber) {
+    cumulativeTime = 0;
+    numTasksPerformed = 0;
+    this->wsNumber = wsNumber;
 }
 
 Workstation::~Workstation() {
 
 }
 
-void Workstation::getTask(Task newTask) {
+void Workstation::assignTask(Task newTask) {
 
 }

@@ -5,18 +5,21 @@
 #ifndef ALGOBOWL_WORKSTATION_H
 #define ALGOBOWL_WORKSTATION_H
 #include "Task.h";
+#include <vector>
 
 using namespace std;
 
 class Workstation {
 public:
-    int cumulative_time;
-    Task currentTask;
-    bool done;
+    int cumulativeTime;
+    int currentTaskNum;
+    int wsNumber;
+    int numTasksPerformed;
+    vector<Task> possTasks;
 
-    Workstation();
+    Workstation(int wsNumber);
     ~Workstation();
-    void getTask(Task newTask);
+    void assignTask(Task newTask);
 
 };
 

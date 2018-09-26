@@ -3,13 +3,17 @@
 //
 
 #include "Task.h"
-string Task::print() {
+#include <iostream>
 
+using namespace std;
+
+void Task::print() {
+    cout << runTimes[0] << ' ' << runTimes[1] << ' ' << runTimes[2] << endl;
 }
 
-Task::Task(int available_time, int * run_times) {
-    this->available_time = available_time;
-    this->run_times = run_times;
+Task::Task(int availableTime, int * runTimes) {
+    this->availableTime = availableTime;
+    this->runTimes = runTimes;
 
 };
 

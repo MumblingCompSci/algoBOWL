@@ -17,6 +17,7 @@ public:
     string print();
 
     Task(int available_time, int run_times[]);
+    Task();
     ~Task();
 };
 

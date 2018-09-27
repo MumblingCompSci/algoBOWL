@@ -8,7 +8,7 @@ string Task::print() {
 }
 
 Task::Task(int available_time, int * run_times) {
-    this->available_time = available_time;
+   this->available_time = available_time;
    this->run_times = run_times;
 
 };

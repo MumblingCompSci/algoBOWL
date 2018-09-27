@@ -10,10 +10,11 @@ int main() {
 
     // the dynamically sized tasks array
     Task * task_array = nullptr;
+    Workstation * workstation_array = nullptr;
 
     // import the tasks(jobs)
     //TODO: replace file string with something that makes more sense
-    InputImporter::loadTasks("file string", task_array);
+    InputImporter::loadTasksAndWorkstations("file string", task_array, workstation_array);
 
 
     /* TODO: The Solutions...
@@ -23,6 +24,9 @@ int main() {
      * ....
      *
      */
+
+    delete[] workstation_array;
+    delete[] task_array;
 
     return 0;
 }

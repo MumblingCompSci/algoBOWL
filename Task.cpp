@@ -18,6 +18,6 @@ Task::Task(int availableTime, int * runTimes) {
 };
 
 Task::~Task() {
-    delete[](this->run_times);
-    delete[](this->call_times);
+    delete[](this->runTimes);
+    delete[](this->callTimes);
 }

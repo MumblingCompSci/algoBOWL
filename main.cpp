@@ -13,22 +13,14 @@ int main() {
     int current_time = 0;
 
     // the dynamically sized tasks array
-    Task * task_array = nullptr;
-    int num_workstations = 3;
+    Task * taskArray = nullptr;
+    Workstation * workstationArray = nullptr;
+    int numTasks = 0;
+    int numWorkstations = 0;
 
     // import the tasks(jobs)
     //TODO: replace file string with something that makes more sense
-    InputImporter::loadTasks("file string", task_array);
-
-
-
-    Workstation * workstationArray;
-    Workstation workstation0(0);
-    Workstation workstation1(1);
-    Workstation workstation2(2);
-    workstationArray[0] = workstation0;
-    workstationArray[1] = workstation1;
-    workstationArray[2] = workstation2;
+    InputImporter::loadTasksAndWorkstations("file string", taskArray, workstationArray, numTasks, numWorkstations);
 
     while(!done(workstationArray, num_workstations)) { //calls the done function below which will check if we are finished
         //TODO: Add tasks that start at current_time to the workstations' possibleTasks arrays
@@ -41,6 +33,9 @@ int main() {
     }
 
     delete[] workstationArray;
+
+    delete[] workstationArray;
+    delete[] taskArray;
 
     return 0;
 }

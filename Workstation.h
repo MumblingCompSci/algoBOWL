@@ -18,7 +18,8 @@ public:
     vector<Task> possTasks;
 
     Workstation(int wsNumber);
-    ~Workstation();
+    Workstation();
+
     void assignTask(Task newTask);
 
 };

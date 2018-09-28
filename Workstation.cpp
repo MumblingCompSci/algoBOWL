@@ -16,10 +16,6 @@ Workstation::Workstation(int wsNumber) {
     this->wsNumber = wsNumber;
 }
 
-Workstation::~Workstation() {
-
-}
-
 void Workstation::assignTask(Task newTask) {
 
 }

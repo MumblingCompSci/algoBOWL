@@ -17,7 +17,8 @@ public:
 
     void print();
 
-    Task(int available_time, int run_times[]);
+    Task();
+    Task(int taskNum, int available_time, int * run_times);
     ~Task();
 };
 

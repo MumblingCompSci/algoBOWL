@@ -11,6 +11,12 @@ void Task::print() {
     cout << runTimes[0] << ' ' << runTimes[1] << ' ' << runTimes[2] << endl;
 }
 
+Task::Task() {
+    availableTime = -1;
+    runTimes = nullptr;
+    taskNum = -1;
+}
+
 Task::Task(int taskNum, int availableTime, int * runTimes) {
     this->availableTime = availableTime;
     this->runTimes = runTimes;

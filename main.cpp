@@ -17,21 +17,15 @@ int main() {
 
     // the dynamically sized tasks array
     Task * taskArray = nullptr;
+    Workstation * workstationArray = nullptr;
+    int numTasks = 0;
+    int numWorkstations = 0;
 
     // import the tasks(jobs)
     //TODO: replace file string with something that makes more sense
-    InputImporter::loadTasks("file string", taskArray);
-    const int NUM_TASKS = 6;
+    InputImporter::loadTasksAndWorkstations("file string", taskArray, workstationArray, numTasks, numWorkstations);
 
-    vector<Task> remainingTasks(taskArray, taskArray + NUM_TASKS);
-
-    Workstation * workstationArray;
-    Workstation workstation0(0);
-    Workstation workstation1(1);
-    Workstation workstation2(2);
-    workstationArray[0] = workstation0;
-    workstationArray[1] = workstation1;
-    workstationArray[2] = workstation2;
+    vector<Task> remainingTasks(taskArray, taskArray + numTasks);
 
     while(!done(workstationArray, NUM_WORKSTATIONS)) { //calls the done function below which will check if we are finished
         //Adds tasks that start at currentTime to the workstations' possibleTasks vectors
@@ -50,7 +44,10 @@ int main() {
         currentTime++;
     }
 
+    //TODO: write results out to a file
+
     delete[] workstationArray;
+    delete[] taskArray;
 
     return 0;
 }

@@ -4,7 +4,7 @@
 
 #ifndef ALGOBOWL_WORKSTATION_H
 #define ALGOBOWL_WORKSTATION_H
-#include "Task.h";
+#include "Task.h"
 #include <vector>
 
 using namespace std;
@@ -19,7 +19,8 @@ public:
 
     Workstation();
     Workstation(int wsNumber);
-    ~Workstation();
+    Workstation();
+
     void assignTask(Task newTask);
 
 };

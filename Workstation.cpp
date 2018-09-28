@@ -18,10 +18,6 @@ Workstation::Workstation(int wsNumber) {
     numTasksPerformed = 0;
 }
 
-Workstation::~Workstation() {
-
-}
-
 void Workstation::assignTask(Task newTask) {
     currentTaskNum = newTask.taskNum;
     newTask.callTimes[wsNumber] = cumulativeTime;

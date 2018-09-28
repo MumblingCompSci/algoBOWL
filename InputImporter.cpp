@@ -30,13 +30,24 @@ void InputImporter::loadTasksAndWorkstations(string file_name, Task *tasks_array
         // make the arrays
         tasks_array = new Task[numTasks];
         workstation_array = new Workstation[numWorkstations];
+        for (int i = 0; i < numWorkstations; i++) {
+            Workstation ws = Workstation(i);
+            workstation_array[i] = ws;
+        }
 
         // load the tasks into the array
-        while (!inputFile.eof()) {
+        for (int x = 0; x < numTasks; x++) {
             int * times = new int[numWorkstations];
-            for (int i = 0; i < numWorkstations; i++) {
+            getline(inputFile, entry, ' ');
+            int availTime = stoi(entry);
 
+            for (int i = 0; i < numWorkstations; i++) {
+                getline(inputFile, entry, ' ');
+                times[i] = stoi(entry);
             }
+
+            Task task = Task(availTime, times);
+            tasks_array[x] = task;
         }
 
         inputFile.close();

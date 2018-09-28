@@ -13,6 +13,7 @@ public:
     int * runTimes;
     int * callTimes;
     int availableTime;
+    int taskNum;
 
     void print();
 

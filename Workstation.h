@@ -15,13 +15,13 @@ public:
     int currentTaskNum;
     int wsNumber;
     int numTasksPerformed;
-    vector<Task> possTasks;
+    vector<Task> possibleTasks;
 
+    Workstation();
     Workstation(int wsNumber);
     ~Workstation();
     void assignTask(Task newTask);
 
 };
-
 
 #endif //ALGOBOWL_WORKSTATION_H

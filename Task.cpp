@@ -11,13 +11,13 @@ void Task::print() {
     cout << runTimes[0] << ' ' << runTimes[1] << ' ' << runTimes[2] << endl;
 }
 
-Task::Task(int availableTime, int * runTimes) {
+Task::Task(int taskNum, int availableTime, int * runTimes) {
     this->availableTime = availableTime;
     this->runTimes = runTimes;
-
-};
+    this->taskNum = taskNum;
+}
 
 Task::~Task() {
-    delete[](this->run_times);
-    delete[](this->call_times);
+    delete[](this->runTimes);
+    delete[](this->callTimes);
 }

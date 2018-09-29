@@ -5,7 +5,9 @@
 #ifndef ALGOBOWL_WORKSTATION_H
 #define ALGOBOWL_WORKSTATION_H
 #include "Task.h"
+
 #include <vector>
+
 
 using namespace std;
 
@@ -19,6 +21,7 @@ public:
     vector<Task> completedTasks;
 
     Workstation();
+
     Workstation(int wsNumber);
 
     void assignTask(Task newTask, int index);

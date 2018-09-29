@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <vector>
 #include "Task.h"
 #include "Workstation.h"
 #include "InputImporter.h"
@@ -7,90 +8,63 @@
 using namespace std;
 
 bool done(Workstation ws[], int n);
-void selectSmallestScheme(Workstation &workstation, Task *task_array);
-void selectBalancedScheme(Workstation *ws, Task *task_array, int ws_num, int num_workstations);
-void selectRandomScheme(Workstation &workstation, Task *task_array);
+void selectNextTask(Workstation &workstation);
+void addToWorkstations(Task taskToAdd, Workstation ws[], int n);
 
 int main() {
-    int current_time = 0;
+    const int NUM_WORKSTATIONS = 3;
+    int currentTime = 0;
 
     // the dynamically sized tasks array
-    Task * task_array = nullptr;
-    int num_workstations = 3;
+    Task * taskArray = nullptr;
+    Workstation * workstationArray = nullptr;
+    int numTasks = 0;
+    int numWorkstations = 0;
 
     // import the tasks(jobs)
     //TODO: replace file string with something that makes more sense
-    InputImporter::loadTasks("file string", task_array);
+    InputImporter::loadTasksAndWorkstations("file string", taskArray, workstationArray, numTasks, numWorkstations);
 
+    vector<Task> remainingTasks(taskArray, taskArray + numTasks);
 
-    /* TODO: The Solutions...
-     * 1. smallest/largest scheme
-     * 2. balanced scheme
-     * 3. random scheme
-     * ....
-     *
-     */
-
-    auto * workstation_array = new Workstation[num_workstations];
-    Workstation ws0, ws1, ws2;
-    workstation_array[0] = ws0;
-    workstation_array[1] = ws1;
-    workstation_array[2] = ws2;
-
-    while(!done(workstation_array, num_workstations)) {
-        for(int i = 0; i < num_workstations; i++) {
-            if(workstation_array[i].cumulative_time == current_time) {
-                selectSmallestScheme(workstation_array[i], task_array);
-                selectBalancedScheme(workstation_array, task_array, i, num_workstations);
-                selectRandomScheme(workstation_array[i], task_array);
+    while(!done(workstationArray, NUM_WORKSTATIONS)) { //calls the done function below which will check if we are finished
+        //Adds tasks that start at currentTime to the workstations' possibleTasks vectors
+        for(int i = 0; i < remainingTasks.size(); i++) {
+            if(remainingTasks.at(i).availableTime == currentTime) {
+                addToWorkstations(remainingTasks.at(i), workstationArray, NUM_WORKSTATIONS);
+                remainingTasks.erase(remainingTasks.begin() + i);
             }
         }
-        current_time++;
+
+        for(int i = 0; i < NUM_WORKSTATIONS; i++) {
+            if(workstationArray[i].cumulativeTime == currentTime) {
+                selectNextTask(workstationArray[i]);
+            }
+        }
+        currentTime++;
     }
 
-    delete[] workstation_array;
+    //TODO: write results out to a file
+
+    delete[] workstationArray;
+    delete[] taskArray;
 
     return 0;
 }
 
-void selectSmallestScheme(Workstation &workstation, Task *task_array) {
-    //TODO: write the selection for a smallest/largest scheme
+void addToWorkstations(Task taskToAdd, Workstation *ws, int n) {
+    //Adds taskToAdd to the possibleTasks vectors in each of the n Workstations in ws[]
+    for(int i = 0; i < n; i++) {
+        ws[i].possibleTasks.push_back(taskToAdd);
+    }
 }
 
-void selectBalancedScheme(Workstation *ws, Task *task_array, int ws_num, int num_workstations) {
-    //TODO: write the selection for a balanced scheme
-    int balanceGoal;
-    if(ws_num != num_workstations - 1) {
-        balanceGoal = ws[ws_num + 1].cumulative_time;
-    } else {
-        balanceGoal = ws[0].cumulative_time;
-    }
-
-    //I need to get this working
-
-    /*
-    int difference = -1;
-    Task * choice = new Task;
-    for(auto t : task_array) {
-        if(difference == -1 || (t.run_times[ws_num] > 0 && abs((ws[ws_num].cumulative_time + t.run_times[ws_num]) - balanceGoal) < difference)) {
-            difference = abs((ws[ws_num].cumulative_time + t.run_times[ws_num]) - balanceGoal);
-            choice = t;
-        }
-    }
-
-    ws[ws_num].getTask(choice);
-    */
-}
-
-void selectRandomScheme(Workstation &workstation, Task *task_array) {
-    //TODO: write the selection for a random scheme
+void selectNextTask(Workstation &workstation) {
+    //Selects a new task for the supplied workstation using a shortest-time-first scheme
+    //TODO: write the selection for a smallest scheme
 }
 
 bool done(Workstation *ws, int n) {
-    for(int i = 0; i < n; i++) {
-        if(!ws[i].done) {
-            return false;
-        }
-    }
-    return true;
+    //Determines if we have completed all of the tasks on all n of the Workstations in ws[]
+    return false;
 }

@@ -5,14 +5,22 @@
 #include "Workstation.h"
 
 Workstation::Workstation() {
-    cumulative_time = 0;
-    done = false;
+    cumulativeTime = 0;
+    currentTaskNum = -1;
+    wsNumber = -1;
+    numTasksPerformed = 0;
 }
 
-Workstation::~Workstation() {
-
+Workstation::Workstation(int wsNumber) {
+    cumulativeTime = 0;
+    currentTaskNum = -1;
+    this->wsNumber = wsNumber;
+    numTasksPerformed = 0;
 }
 
-void Workstation::getTask(Task newTask) {
-
+void Workstation::assignTask(Task newTask) {
+    currentTaskNum = newTask.taskNum;
+    newTask.callTimes[wsNumber] = cumulativeTime;
+    cumulativeTime += newTask.runTimes[wsNumber];
+    numTasksPerformed++;
 }

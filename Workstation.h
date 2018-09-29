@@ -6,18 +6,26 @@
 #define ALGOBOWL_WORKSTATION_H
 #include "Task.h"
 
+#include <vector>
+
+
 using namespace std;
 
 class Workstation {
 public:
-    int cumulative_time;
-    Task currentTask;
-    bool done;
+    int cumulativeTime;
+    int currentTaskNum;
+    int wsNumber;
+    int numTasksPerformed;
+    vector<Task> possibleTasks;
 
     Workstation();
-    ~Workstation();
-    void getTask(Task newTask);
-};
 
+    Workstation(int wsNumber);
+    //Workstation();
+
+    void assignTask(Task newTask);
+
+};
 
 #endif //ALGOBOWL_WORKSTATION_H

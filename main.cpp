@@ -25,6 +25,8 @@ int main() {
     //TODO: replace file string with something that makes more sense
     InputImporter::loadTasksAndWorkstations("../test_input.txt", taskArray, workstationArray, numTasks, numWorkstations);
 
+    cout << numTasks << " " << numWorkstations << endl;
+
     vector<Task> remainingTasks(taskArray, taskArray + numTasks);
 
     while(!done(workstationArray, NUM_WORKSTATIONS)) { //calls the done function below which will check if we are finished

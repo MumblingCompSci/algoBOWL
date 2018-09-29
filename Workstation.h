@@ -22,7 +22,6 @@ public:
     Workstation();
 
     Workstation(int wsNumber);
-    //Workstation();
 
     void assignTask(Task newTask);
 

@@ -23,7 +23,7 @@ int main() {
 
     // import the tasks(jobs)
     //TODO: replace file string with something that makes more sense
-    InputImporter::loadTasksAndWorkstations("file string", taskArray, workstationArray, numTasks, numWorkstations);
+    InputImporter::loadTasksAndWorkstations("../test_input.txt", taskArray, workstationArray, numTasks, numWorkstations);
 
     vector<Task> remainingTasks(taskArray, taskArray + numTasks);
 

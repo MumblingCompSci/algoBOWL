@@ -16,11 +16,12 @@ public:
     int wsNumber;
     int numTasksPerformed;
     vector<Task> possibleTasks;
+    vector<Task> completedTasks;
 
     Workstation();
     Workstation(int wsNumber);
 
-    void assignTask(Task newTask);
+    void assignTask(Task newTask, int index);
 
 };
 

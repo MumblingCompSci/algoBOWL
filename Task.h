@@ -15,7 +15,7 @@ public:
     int availableTime;
     int taskNum;
 
-    void print();
+    string print();
 
     Task();
     Task(int taskNum, int available_time, int * run_times);

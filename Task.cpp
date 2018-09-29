@@ -4,11 +4,13 @@
 
 #include "Task.h"
 #include <iostream>
+#include <string>
 
 using namespace std;
 
-void Task::print() {
+string Task::print() {
     cout << runTimes[0] << ' ' << runTimes[1] << ' ' << runTimes[2] << endl;
+    return(to_string(runTimes[0]) + " " + to_string(runTimes[1]) + " " + to_string(runTimes[2]));
 }
 
 Task::Task() {

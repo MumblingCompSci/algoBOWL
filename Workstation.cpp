@@ -18,9 +18,11 @@ Workstation::Workstation(int wsNumber) {
     numTasksPerformed = 0;
 }
 
-void Workstation::assignTask(Task newTask) {
+void Workstation::assignTask(Task newTask, int index) {
     currentTaskNum = newTask.taskNum;
     newTask.callTimes[wsNumber] = cumulativeTime;
     cumulativeTime += newTask.runTimes[wsNumber];
     numTasksPerformed++;
+    completedTasks.push_back(possibleTasks.at(index));
+    possibleTasks.erase(possibleTasks.begin() + index);
 }

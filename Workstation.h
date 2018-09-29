@@ -4,13 +4,15 @@
 
 #ifndef ALGOBOWL_WORKSTATION_H
 #define ALGOBOWL_WORKSTATION_H
-#include "Task.h";
+#include "Task.h"
 
 using namespace std;
 
 class Workstation {
 public:
-    int cumulative_time = 0;
+    int cumulative_time;
+    Task currentTask;
+    bool done;
 
     Workstation();
     ~Workstation();

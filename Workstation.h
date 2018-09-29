@@ -21,8 +21,8 @@ public:
     vector<Task> completedTasks;
 
     Workstation();
-
     Workstation(int wsNumber);
+    //~Workstation();
 
     void assignTask(Task newTask, int index);
 

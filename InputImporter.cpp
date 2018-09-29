@@ -11,7 +11,7 @@
 
 using namespace std;
 
-void InputImporter::loadTasksAndWorkstations(string file_name, Task *tasks_array, Workstation *workstation_array, int & numTasks, int & numWorkstations) {
+void InputImporter::loadTasksAndWorkstations(string file_name, vector<Task> &tasks_vector, int & numTasks, int & numWorkstations) {
 
     // load the file
     //TODO: figure out filepath stuff
@@ -25,30 +25,27 @@ void InputImporter::loadTasksAndWorkstations(string file_name, Task *tasks_array
         numTasks = stoi(entry);
 
         // read the number of workstations
-        getline(inputFile, entry, ' ');
+        getline(inputFile, entry);
         numWorkstations = stoi(entry);
-
-        // make the arrays
-        tasks_array = new Task[numTasks];
-        workstation_array = new Workstation[numWorkstations];
-        for (int i = 0; i < numWorkstations; i++) {
-            Workstation ws = Workstation(i);
-            workstation_array[i] = ws;
-        }
 
         // load the tasks into the array
         for (int x = 0; x < numTasks; x++) {
-            int * times = new int[numWorkstations];
+            int * times = new int[3];
             getline(inputFile, entry, ' ');
             int availTime = stoi(entry);
+            //cout << "Available time: " << availTime << endl << "Times: ";
 
-            for (int i = 0; i < numWorkstations; i++) {
+            for (int i = 0; i < numWorkstations - 1; i++) {
                 getline(inputFile, entry, ' ');
                 times[i] = stoi(entry);
+                //cout << times[i] << ' ';
             }
+            getline(inputFile, entry);
+            times[2] = stoi(entry);
+            //cout << times[2] << endl;
 
             Task task = Task(x, availTime, times);
-            tasks_array[x] = task;
+            tasks_vector.push_back(task);
         }
 
         inputFile.close();

@@ -18,15 +18,20 @@ int currentTime = 0;
 
 int main() {
     // the dynamically sized tasks array
-    Task * taskArray = nullptr;
-    Workstation * workstationArray = nullptr;
+    vector<Task> taskVector;
     int numTasks = 0;
     int numWorkstations = 0;
 
     // import the tasks(jobs)
-    InputImporter::loadTasksAndWorkstations("../test_input.txt", taskArray, workstationArray, numTasks, numWorkstations);
+    InputImporter::loadTasksAndWorkstations("../test_input.txt", taskVector, numTasks, numWorkstations);
 
-    vector<Task> remainingTasks(taskArray, taskArray + numTasks);
+    vector<Task> remainingTasks = taskVector;
+
+    Workstation * workstationArray = new Workstation[3];
+    for (int i = 0; i < 3; i++) {
+        Workstation ws(i);
+        workstationArray[i] = ws;
+    }
 
     while(!done(workstationArray, remainingTasks, numTasks)) { //calls the done function below which will check if we are finished
         //Adds tasks that start at currentTime to the workstations' possibleTasks vectors
@@ -34,6 +39,7 @@ int main() {
             if(remainingTasks.at(i).availableTime == currentTime) {
                 addToWorkstations(remainingTasks.at(i), workstationArray);
                 remainingTasks.erase(remainingTasks.begin() + i);
+                i--;
             }
         }
 
@@ -53,25 +59,38 @@ int main() {
     }
 
     ofstream outputFile;
-    outputFile.open("output.txt");
+    outputFile.open("../output.txt");
 
-    outputFile << totalTime << endl;
+    if(outputFile.is_open()) {
+        outputFile << totalTime << endl;
 
-    for(int i = 0; i < numTasks; i++) {
-        if(taskArray[i].taskNum == i) {
-            outputFile << taskArray[i].print();
-            if(i != numTasks - 1) {
-                outputFile << endl;
+        for(int i = 0; i < numTasks; i++) {
+            if(taskVector.at(i).taskNum == i) {
+                outputFile << taskVector.at(i).print();
+                if(i != numTasks - 1) {
+                    outputFile << endl;
+                }
+            } else {
+                cout << "Something done f***ed up in the order of tasks" << endl;
             }
-        } else {
-            cout << "Something done f***ed up in the order of tasks" << endl;
         }
+    } else {
+        cerr << "COULD NOT OPEN FILE" << endl;
     }
+
+    /*
+    while(!taskVector.empty()) {
+        Task curr = taskVector.at(0);
+        taskVector.erase(taskVector.begin());
+        delete curr;
+    }
+     */
+
+    outputFile.close();
 
     //TODO: verify our results
 
     delete[] workstationArray;
-    delete[] taskArray;
 
     return 0;
 }
@@ -96,10 +115,12 @@ void selectNextTask(Workstation &workstation, Workstation *ws) {
         }
     }
     if(foundTask) {
+        //cout << "Assigning task " << workstation.possibleTasks.at(minIndex).taskNum << " to Workstation " << workstation.wsNumber << " at time " << currentTime << endl;
         workstation.assignTask(workstation.possibleTasks.at(minIndex), minIndex);
     } else {
-        workstation.currentTaskNum = NULL;
+        workstation.currentTaskNum = -1;
         workstation.cumulativeTime++;
+        //cout << "No task assigned to Workstation " << workstation.wsNumber << " at time " << currentTime << endl;
     }
 }
 
@@ -121,12 +142,12 @@ bool done(Workstation *ws, vector<Task> remainingTasks, int numTasks) {
         if(!ws[i].possibleTasks.empty()) {
             return false;
         }
-        if(ws[i].numTasksPerformed < numTasks) {
+        /*if(ws[i].numTasksPerformed < numTasks) {
             return false;
         } else if(ws[i].numTasksPerformed > numTasks) {
             cout << "Something done f***ed up because you did more tasks than there were" << endl;
             return true;
-        }
+        }*/
     }
     return true;
 }

@@ -9,13 +9,12 @@
 using namespace std;
 
 string Task::print() {
-    cout << runTimes[0] << ' ' << runTimes[1] << ' ' << runTimes[2] << endl;
-    return(to_string(runTimes[0]) + " " + to_string(runTimes[1]) + " " + to_string(runTimes[2]));
+    return(to_string(callTimes[0]) + " " + to_string(callTimes[1]) + " " + to_string(callTimes[2]));
 }
 
 Task::Task() {
-    availableTime = -1;
     runTimes = nullptr;
+    callTimes = new int[3];
     taskNum = -1;
 }
 
@@ -23,9 +22,13 @@ Task::Task(int taskNum, int availableTime, int * runTimes) {
     this->availableTime = availableTime;
     this->runTimes = runTimes;
     this->taskNum = taskNum;
+    callTimes = new int[3];
 }
 
-Task::~Task() {
-    delete[](this->runTimes);
-    delete[](this->callTimes);
+/*Task::~Task() {
+    delete[] runTimes;
+    runTimes = NULL;
+    delete[] callTimes;
+    callTimes = NULL;
 }
+*/

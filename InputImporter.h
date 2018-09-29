@@ -8,13 +8,14 @@
 #include "Task.h"
 #include "Workstation.h"
 #include <string>
+#include <vector>
 
 using namespace std;
 
 
 class InputImporter {
 public:
-    static void loadTasksAndWorkstations(string file_name, Task *tasks_array, Workstation *workstation_array, int & numTasks, int & numWorkstations);
+    static void loadTasksAndWorkstations(string file_name, vector<Task> &tasks_vector, int & numTasks, int & numWorkstations);
 };
 
 

@@ -1,0 +1,8 @@
+//
+// Created by Owner on 9/30/2018.
+//
+
+#ifndef ALGOBOWL_OUTPUTIMPORTER_H
+#define ALGOBOWL_OUTPUTIMPORTER_H
+
+#endif //ALGOBOWL_OUTPUTIMPORTER_H

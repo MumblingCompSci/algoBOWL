@@ -14,7 +14,6 @@ using namespace std;
 void InputImporter::loadTasksAndWorkstations(string file_name, vector<Task> &tasks_vector, int & numTasks, int & numWorkstations) {
 
     // load the file
-    //TODO: figure out filepath stuff
     ifstream inputFile;
     inputFile.open(file_name);
 

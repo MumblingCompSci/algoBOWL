@@ -19,6 +19,7 @@ public:
 
     Task();
     Task(int taskNum, int available_time, int * run_times);
+    Task(int taskNum, int available_time, int * run_times, int * callTimes);
     //~Task();
 };
 

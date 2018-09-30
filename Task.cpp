@@ -5,6 +5,7 @@
 #include "Task.h"
 #include <iostream>
 #include <string>
+#include <array>
 
 using namespace std;
 
@@ -23,6 +24,13 @@ Task::Task(int taskNum, int availableTime, int * runTimes) {
     this->runTimes = runTimes;
     this->taskNum = taskNum;
     callTimes = new int[3];
+}
+
+Task::Task(int taskNum, int availableTime, int * runTimes, int * callTimes) {
+    this->availableTime = availableTime;
+    this->runTimes = runTimes;
+    this->callTimes = callTimes;
+    this->taskNum = taskNum;
 }
 
 /*Task::~Task() {

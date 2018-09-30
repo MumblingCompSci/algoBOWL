@@ -119,11 +119,12 @@ int main() {
             workstationArray[i].possibleTasks = taskVector;
         }
 
+
         while(!done(workstationArray, numTasks) || givenTotalTime > currentTime) { //calls the done function below which will check if we are finished
             for(int i = 0; i < NUM_WORKSTATIONS; i++) {
                 if(workstationArray[i].cumulativeTime == currentTime) {
                     bool overlap = !verifierNextTask(workstationArray[i], workstationArray);
-                    // checck for overlap
+                    // check for overlap
                     if(overlap){
                         cout << "Output incorrect: overlap on tasks";
                         return 0;
@@ -133,16 +134,19 @@ int main() {
             currentTime++;
         }
 
-        if(givenTotalTime < currentTime){
-            cout << "Output incorrect: given total time too small";
-            return 0;
-        }
+        //TODO: check for if two tasks say they start at the same time on the same workstation
 
         for(int i = 0; i < NUM_WORKSTATIONS; i++) {
             if(workstationArray[i].cumulativeTime > calcTotalTime) {
                 calcTotalTime = workstationArray[i].cumulativeTime;
             }
         }
+
+        if(givenTotalTime < calcTotalTime){
+            cout << "Output incorrect: given total time too small";
+            return 0;
+        }
+
         // check for total time given
         if (calcTotalTime != givenTotalTime) {
             cout << "Output incorrect: invalid total time";
@@ -197,22 +201,20 @@ bool verifierNextTask(Workstation &workstation, Workstation *ws) {
     bool foundTask = false;
     int index = 0;
     for(int i = 0; i < workstation.possibleTasks.size(); i++) {
-        if(workstation.possibleTasks.at(i).runTimes[workstation.wsNumber] == currentTime && !checkForOverlap(workstation.possibleTasks.at(i).taskNum, ws)) {
+        if(workstation.possibleTasks.at(i).callTimes[workstation.wsNumber] == currentTime && !checkForOverlap(workstation.possibleTasks.at(i).taskNum, ws)) {
             foundTask = true;
             index = i;
             break;
         }
-        else if(checkForOverlap(workstation.possibleTasks.at(i).taskNum, ws)){
+        else if(workstation.possibleTasks.at(i).callTimes[workstation.wsNumber] == currentTime && checkForOverlap(workstation.possibleTasks.at(i).taskNum, ws)){
             return false;
         }
     }
     if(foundTask) {
-        //cout << "Assigning task " << workstation.possibleTasks.at(minIndex).taskNum << " to Workstation " << workstation.wsNumber << " at time " << currentTime << endl;
         workstation.assignTask(workstation.possibleTasks.at(index), index);
     } else {
         workstation.currentTaskNum = -1;
         workstation.cumulativeTime++;
-        //cout << "No task assigned to Workstation " << workstation.wsNumber << " at time " << currentTime << endl;
     }
     return true;
 }
@@ -220,6 +222,7 @@ bool verifierNextTask(Workstation &workstation, Workstation *ws) {
 bool checkForOverlap(int taskNumCheck, Workstation *ws) {
     for(int i = 0; i < NUM_WORKSTATIONS; i++) {
         if(ws[i].currentTaskNum == taskNumCheck && ws[i].cumulativeTime > currentTime) {
+            //cout << endl << "Task number " << taskNumCheck << " is overlapping with workstation " << i << " at time " << currentTime << endl;
             return true;
         }
     }

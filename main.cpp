@@ -2,6 +2,7 @@
 #include <cmath>
 #include <vector>
 #include <fstream>
+#include <ctime>
 #include "Task.h"
 #include "Workstation.h"
 #include "InputImporter.h"
@@ -19,23 +20,44 @@ bool checkForOverlap(int taskNumCheck, Workstation ws[]);
 const int NUM_WORKSTATIONS = 3;
 int currentTime = 0;
 
-const string generateInputFileName = "../easyInput.txt";
-const string generateOutputFileName = "../easyOutput.txt";
+const string randomInputFileName = "../randomInput.txt";
 
-const string verifyInputFileName = "../easyInput.txt";
-const string verifyOutputFileName = "../easyOutput.txt";
+const string generateInputFileName = "../randomInput.txt";
+const string generateOutputFileName = "../randomOutput.txt";
+
+const string verifyInputFileName = "../randomInput.txt";
+const string verifyOutputFileName = "../randomOutput.txt";
 
 int main() {
     char userKey;
 
-    cout << "Generate an output (G) or Verify and output (V)?  ";
+    cout << "Create an input (I), Generate an output (G) or Verify and output (V)?  ";
     cin >> userKey;
 
-    if (userKey == 'G') {
+    if(userKey == 'I') {
+        int n;
+        cout << "How many tasks?";
+        cin >> n;
+
+        clock_t start = clock();
+
+        InputImporter::generateInput(n, randomInputFileName);
+
+        cout << "Generating random input..." << endl;
+        cout << "Random input file: " << generateInputFileName << endl;
+
+        clock_t end = clock();
+
+        cout << "Random input file generated in " << ((double)(end - start))/CLOCKS_PER_SEC << " seconds." << endl;
+    }
+
+    else if (userKey == 'G') {
         //print some useful info (to make sure we're doing the right thing)
         cout << "Generating output..." << endl;
         cout << "Input file: " << generateInputFileName << endl;
         cout << "Output file: " << generateOutputFileName << endl;
+
+        clock_t start = clock();
 
         // the dynamically sized tasks array
         vector<Task> taskVector;
@@ -102,7 +124,9 @@ int main() {
 
         delete[] workstationArray;
 
-        cout << "Output generated." << endl;
+        clock_t end = clock();
+
+        cout << "Output generated in " << ((double)(end - start))/CLOCKS_PER_SEC << " seconds." << endl;
     }
 
     else if (userKey == 'V') {
@@ -110,6 +134,8 @@ int main() {
         cout << "Verifying output..." << endl;
         cout << "Input file: " << verifyInputFileName << endl;
         cout << "Output file: " << verifyOutputFileName << endl;
+
+        clock_t start = clock();
 
         int calcTotalTime = 0;
         // the dynamically sized tasks array
@@ -175,6 +201,10 @@ int main() {
         }
 
         cout << "IT DID IT!!!!!" << endl;
+
+        clock_t end = clock();
+
+        cout << "Output verified in " << ((double)(end - start))/CLOCKS_PER_SEC << " seconds." << endl;
     }
 
     return 0;

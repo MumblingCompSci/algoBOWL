@@ -15,6 +15,7 @@ using namespace std;
 
 class InputImporter {
 public:
+    static void generateInput(int n, string file);
     static void loadTasksAndWorkstations(string file_name, vector<Task> &tasks_vector, int & numTasks, int & numWorkstations);
 };
 

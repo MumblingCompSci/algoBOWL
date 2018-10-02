@@ -5,11 +5,38 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <cstdlib>
+#include <ctime>
 #include "InputImporter.h"
 #include "Workstation.h"
 #include "Task.h"
 
 using namespace std;
+
+void InputImporter::generateInput(int n, string file) {
+    ofstream out; //declare file out stream
+    out.open(file);
+
+    out << n << ' ' << 3 << endl; //insert the number of tasks and number of workstations
+
+    srand(time(0));
+
+    for(int i = 0; i < n; i++) { //create n-1 tasks
+        int startTime, runTime1, runTime2, runTime3;
+        startTime = rand() % 51; //will result in start times between 0 and 50
+        runTime1 = (rand() % 50) + 1; //will result in a run time between 1 and 50
+        runTime2 = (rand() % 50) + 1;
+        runTime3 = (rand() % 50) + 1;
+
+        out << startTime << ' ' << runTime1 << ' ' << runTime2 << ' ' << runTime3;
+
+        if(i != n - 1) {
+            out << endl;
+        }
+    }
+
+    out.close();
+}
 
 void InputImporter::loadTasksAndWorkstations(string file_name, vector<Task> &tasks_vector, int & numTasks, int & numWorkstations) {
 

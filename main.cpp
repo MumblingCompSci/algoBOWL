@@ -9,8 +9,8 @@
 
 using namespace std;
 
-bool done(Workstation ws[], vector<Task> remainingTasks, int numTasks);
-bool done(Workstation ws[], int numTasks);
+bool done(Workstation ws[], vector<Task> remainingTasks);
+bool done(Workstation ws[]);
 void selectNextTask(Workstation &workstation, Workstation ws[]);
 bool verifierNextTask(Workstation &workstation, Workstation ws[]);
 void addToWorkstations(Task taskToAdd, Workstation ws[]);
@@ -19,6 +19,12 @@ bool checkForOverlap(int taskNumCheck, Workstation ws[]);
 const int NUM_WORKSTATIONS = 3;
 int currentTime = 0;
 
+const string generateInputFileName = "../easyInput.txt";
+const string generateOutputFileName = "../easyOutput.txt";
+
+const string verifyInputFileName = "../test_input.txt";
+const string verifyOutputFileName = "../output.txt";
+
 int main() {
     char userKey;
 
@@ -26,13 +32,18 @@ int main() {
     cin >> userKey;
 
     if (userKey == 'G') {
+        //print some useful info (to make sure we're doing the right thing)
+        cout << "Generating output..." << endl;
+        cout << "Input file: " << generateInputFileName << endl;
+        cout << "Output file: " << generateOutputFileName << endl;
+
         // the dynamically sized tasks array
         vector<Task> taskVector;
         int numTasks = 0;
         int numWorkstations = 0;
 
         // import the tasks(jobs)
-        InputImporter::loadTasksAndWorkstations("../test_input.txt", taskVector, numTasks, numWorkstations);
+        InputImporter::loadTasksAndWorkstations(generateInputFileName, taskVector, numTasks, numWorkstations);
 
         vector<Task> remainingTasks = taskVector;
 
@@ -42,7 +53,7 @@ int main() {
             workstationArray[i] = ws;
         }
 
-        while(!done(workstationArray, remainingTasks, numTasks)) { //calls the done function below which will check if we are finished
+        while(!done(workstationArray, remainingTasks)) { //calls the done function below which will check if we are finished
             //Adds tasks that start at currentTime to the workstations' possibleTasks vectors
             for(int i = 0; i < remainingTasks.size(); i++) {
                 if(remainingTasks.at(i).availableTime == currentTime) {
@@ -68,7 +79,7 @@ int main() {
         }
 
         ofstream outputFile;
-        outputFile.open("../output.txt");
+        outputFile.open(generateOutputFileName);
 
         if(outputFile.is_open()) {
             outputFile << totalTime << endl;
@@ -87,22 +98,19 @@ int main() {
             cerr << "COULD NOT OPEN FILE" << endl;
         }
 
-        /*
-        while(!taskVector.empty()) {
-            Task curr = taskVector.at(0);
-            taskVector.erase(taskVector.begin());
-            delete curr;
-        }
-         */
-
         outputFile.close();
 
-        //TODO: verify our results
-
         delete[] workstationArray;
+
+        cout << "Output generated." << endl;
     }
 
     else if (userKey == 'V') {
+        //print some useful info (to make sure we're doing the right thing)
+        cout << "Verifying output..." << endl;
+        cout << "Input file: " << verifyInputFileName << endl;
+        cout << "Output file: " << verifyOutputFileName << endl;
+
         int calcTotalTime = 0;
         // the dynamically sized tasks array
         vector<Task> taskVector;
@@ -110,7 +118,7 @@ int main() {
         int numWorkstations = 0;
 
         // import the tasks(jobs)
-        int givenTotalTime = OutputImporter::loadTasksAndWorkstations("../test_input.txt", "../output.txt",taskVector, numTasks, numWorkstations);
+        int givenTotalTime = OutputImporter::loadTasksAndWorkstations(verifyInputFileName, verifyOutputFileName,taskVector, numTasks, numWorkstations);
 
         Workstation * workstationArray = new Workstation[3];
         for (int i = 0; i < 3; i++) {
@@ -119,8 +127,7 @@ int main() {
             workstationArray[i].possibleTasks = taskVector;
         }
 
-
-        while(!done(workstationArray, numTasks) || givenTotalTime > currentTime) { //calls the done function below which will check if we are finished
+        while(!done(workstationArray) && givenTotalTime > currentTime) { //calls the done function below which will check if we are finished
             for(int i = 0; i < NUM_WORKSTATIONS; i++) {
                 if(workstationArray[i].cumulativeTime == currentTime) {
                     bool overlap = !verifierNextTask(workstationArray[i], workstationArray);
@@ -134,31 +141,37 @@ int main() {
             currentTime++;
         }
 
-        //TODO: check for if two tasks say they start at the same time on the same workstation
+        //check that no tasks were skipped
+        if(!workstationArray[0].possibleTasks.empty() || !workstationArray[1].possibleTasks.empty() || !workstationArray[2].possibleTasks.empty()) {
+            cout << "Output incorrect: a task has not been executed";
+            return 0;
+        }
 
+        //double-check for above: check that all stations have completed all tasks
+        for(int i = 0; i < NUM_WORKSTATIONS; i++) {
+            if(workstationArray[i].numTasksPerformed != taskVector.size()) {
+                cout << "Output incorrect: missing tasks from completion";
+                return 0;
+            }
+        }
+
+        //find the largest internal time to compare w/ given time
         for(int i = 0; i < NUM_WORKSTATIONS; i++) {
             if(workstationArray[i].cumulativeTime > calcTotalTime) {
                 calcTotalTime = workstationArray[i].cumulativeTime;
             }
         }
 
+        //check if the calculated total time was less than the output file said
         if(givenTotalTime < calcTotalTime){
             cout << "Output incorrect: given total time too small";
             return 0;
         }
 
-        // check for total time given
-        if (calcTotalTime != givenTotalTime) {
-            cout << "Output incorrect: invalid total time";
+        //check if the calculated total was greater than their output file said
+        if (givenTotalTime > calcTotalTime) {
+            cout << "Output incorrect: given total time too large";
             return 0;
-        }
-
-        // check that all stations have completed all tasks
-        for(int i = 0; i < NUM_WORKSTATIONS; i++) {
-            if(workstationArray[i].numTasksPerformed != taskVector.size()) {
-                cout << "Output incorrect: missing tasks from completion";
-                return 0;
-            }
         }
 
         cout << "IT DID IT!!!!!" << endl;
@@ -229,7 +242,7 @@ bool checkForOverlap(int taskNumCheck, Workstation *ws) {
     return false;
 }
 
-bool done(Workstation *ws, vector<Task> remainingTasks, int numTasks) {
+bool done(Workstation *ws, vector<Task> remainingTasks) {
     //Determines if we have completed all of the tasks on all n of the Workstations in ws[]
     if(!remainingTasks.empty()) {
         return false;
@@ -242,7 +255,7 @@ bool done(Workstation *ws, vector<Task> remainingTasks, int numTasks) {
     return true;
 }
 
-bool done(Workstation *ws, int numTasks) {
+bool done(Workstation *ws) {
     for(int i = 0; i < NUM_WORKSTATIONS; i++) {
         if(!ws[i].possibleTasks.empty()) {
             return false;

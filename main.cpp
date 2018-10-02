@@ -22,8 +22,8 @@ int currentTime = 0;
 const string generateInputFileName = "../easyInput.txt";
 const string generateOutputFileName = "../easyOutput.txt";
 
-const string verifyInputFileName = "../test_input.txt";
-const string verifyOutputFileName = "../output.txt";
+const string verifyInputFileName = "../easyInput.txt";
+const string verifyOutputFileName = "../easyOutput.txt";
 
 int main() {
     char userKey;

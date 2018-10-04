@@ -22,11 +22,11 @@ int currentTime = 0;
 
 const string randomInputFileName = "../randomInput.txt";
 
-const string generateInputFileName = "../randomInput.txt";
-const string generateOutputFileName = "../randomOutput.txt";
+const string generateInputFileName = "../all_inputs/inputs/test39.txt";
+const string generateOutputFileName = "../all_inputs/outputs/test39rachel.txt";
 
-const string verifyInputFileName = "../randomInput.txt";
-const string verifyOutputFileName = "../randomOutput.txt";
+const string verifyInputFileName = "../all_inputs/inputs/input_group28.txt";
+const string verifyOutputFileName = "../verification_outputs/output_from_39_to_28.txt";
 
 int main() {
     char userKey;
@@ -57,7 +57,7 @@ int main() {
         cout << "Input file: " << generateInputFileName << endl;
         cout << "Output file: " << generateOutputFileName << endl;
 
-        clock_t start = clock();
+        //clock_t start = clock();
 
         // the dynamically sized tasks array
         vector<Task> taskVector;
@@ -69,6 +69,31 @@ int main() {
 
         vector<Task> remainingTasks = taskVector;
 
+        int sums[3];
+        sums[0] = 0;
+        sums[1] = 0;
+        sums[2] = 0;
+        for(int i = 0; i < numTasks; i++) {
+            sums[0] += remainingTasks.at(i).runTimes[0];
+            sums[1] += remainingTasks.at(i).runTimes[1];
+            sums[2] += remainingTasks.at(i).runTimes[2];
+        }
+
+        for(int i = 0; i < 3; i++) {
+            cout << "Workstation " << i << " takes " << sums[i] << " time." << endl;
+        }
+
+        //int maxCol = 0;
+        int maxIndex = 1;
+        /*
+        for(int i = 0; i < 3; i++) {
+            if(sums[i] > maxCol) {
+                maxCol = sums[i];
+                maxIndex = i;
+            }
+        }
+         */
+
         Workstation * workstationArray = new Workstation[3];
         for (int i = 0; i < 3; i++) {
             Workstation ws(i);
@@ -79,17 +104,68 @@ int main() {
             //Adds tasks that start at currentTime to the workstations' possibleTasks vectors
             for(int i = 0; i < remainingTasks.size(); i++) {
                 if(remainingTasks.at(i).availableTime == currentTime) {
-                    addToWorkstations(remainingTasks.at(i), workstationArray);
+                    //addToWorkstations(remainingTasks.at(i), workstationArray);
+                    workstationArray[maxIndex].possibleTasks.push_back(remainingTasks.at(i));
                     remainingTasks.erase(remainingTasks.begin() + i);
                     i--;
                 }
             }
 
-            for(int i = 0; i < NUM_WORKSTATIONS; i++) {
+            /*
+            for(int i = 2; i >= 0; i--) {
                 if(workstationArray[i].cumulativeTime == currentTime) {
                     selectNextTask(workstationArray[i], workstationArray);
                 }
             }
+             */
+
+            if(workstationArray[maxIndex].cumulativeTime == currentTime) {
+                selectNextTask(workstationArray[maxIndex], workstationArray);
+            }
+
+            currentTime++;
+        }
+
+        //cout << workstationArray[maxIndex].cumulativeTime << endl;
+        currentTime = 0;
+        remainingTasks = taskVector;
+        int startTaskCall = INT_MAX;
+        int startTaskNum;
+        for(int i = 0; i < numTasks; i++) {
+            if(remainingTasks.at(i).callTimes[maxIndex] < startTaskCall) {
+                startTaskCall = remainingTasks.at(i).callTimes[maxIndex];
+                startTaskNum = remainingTasks.at(i).taskNum;
+            }
+        }
+        //cout << startTaskNum << endl;
+        workstationArray[maxIndex].currentTaskNum = startTaskNum;
+        //cout << "remainingTasks size: " << remainingTasks.size() << endl;
+
+        while(!done(workstationArray, remainingTasks)) { //calls the done function below which will check if we are finished
+            //Adds tasks that start at currentTime to the workstations' possibleTasks vectors
+            for(int i = 0; i < remainingTasks.size(); i++) {
+                if(remainingTasks.at(i).availableTime == currentTime) {
+                    workstationArray[0].possibleTasks.push_back(remainingTasks.at(i));
+                    workstationArray[2].possibleTasks.push_back(remainingTasks.at(i));
+                    remainingTasks.erase(remainingTasks.begin() + i);
+                    i--;
+                }
+            }
+
+            for(int j = 0; j < taskVector.size(); j++) {
+                if(taskVector[j].callTimes[maxIndex] == currentTime){
+                    workstationArray[maxIndex].currentTaskNum = j;
+                }
+            }
+
+            for(int i = 0; i < 3; i++) {
+                if(i != maxIndex) {
+                    if(workstationArray[i].cumulativeTime == currentTime) {
+                        selectNextTask(workstationArray[i], workstationArray);
+                    }
+                }
+            }
+
             currentTime++;
         }
 
@@ -124,9 +200,9 @@ int main() {
 
         delete[] workstationArray;
 
-        clock_t end = clock();
+        //clock_t end = clock();
 
-        cout << "Output generated in " << ((double)(end - start))/CLOCKS_PER_SEC << " seconds." << endl;
+        //cout << "Output generated in " << ((double)(end - start))/CLOCKS_PER_SEC << " seconds." << endl;
     }
 
     else if (userKey == 'V') {
@@ -196,7 +272,7 @@ int main() {
 
         //check if the calculated total was greater than their output file said
         if (givenTotalTime > calcTotalTime) {
-            cout << "Output incorrect: given total time too large";
+            cout << "Given: " << givenTotalTime << "Calculated: " << calcTotalTime << "Output incorrect: given total time too large";
             return 0;
         }
 
@@ -244,12 +320,21 @@ bool verifierNextTask(Workstation &workstation, Workstation *ws) {
     bool foundTask = false;
     int index = 0;
     for(int i = 0; i < workstation.possibleTasks.size(); i++) {
-        if(workstation.possibleTasks.at(i).callTimes[workstation.wsNumber] == currentTime && !checkForOverlap(workstation.possibleTasks.at(i).taskNum, ws)) {
+        if(workstation.possibleTasks.at(i).callTimes[workstation.wsNumber] == currentTime && !checkForOverlap(workstation.possibleTasks.at(i).taskNum, ws) && workstation.possibleTasks.at(i).availableTime <= currentTime) {
             foundTask = true;
             index = i;
             break;
         }
-        else if(workstation.possibleTasks.at(i).callTimes[workstation.wsNumber] == currentTime && checkForOverlap(workstation.possibleTasks.at(i).taskNum, ws)){
+        else if(workstation.possibleTasks.at(i).callTimes[workstation.wsNumber] == currentTime && checkForOverlap(workstation.possibleTasks.at(i).taskNum, ws) && workstation.possibleTasks.at(i).availableTime <= currentTime){
+            cout << "Overlapping and available" << endl;
+            return false;
+        }
+        else if(workstation.possibleTasks.at(i).callTimes[workstation.wsNumber] == currentTime && !checkForOverlap(workstation.possibleTasks.at(i).taskNum, ws) && workstation.possibleTasks.at(i).availableTime > currentTime){
+            cout << "Not overlapping and not available" << endl;
+            return false;
+        }
+        else if(workstation.possibleTasks.at(i).callTimes[workstation.wsNumber] == currentTime && checkForOverlap(workstation.possibleTasks.at(i).taskNum, ws) && workstation.possibleTasks.at(i).availableTime > currentTime){
+            cout << "Overlapping and not available" << endl;
             return false;
         }
     }

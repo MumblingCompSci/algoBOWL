@@ -15,18 +15,18 @@ string Task::print() {
 
 Task::Task() {
     runTimes = nullptr;
-    callTimes = new int[3];
+    callTimes = new long[3];
     taskNum = -1;
 }
 
-Task::Task(int taskNum, int availableTime, int * runTimes) {
+Task::Task(int taskNum, int availableTime, long * runTimes) {
     this->availableTime = availableTime;
     this->runTimes = runTimes;
     this->taskNum = taskNum;
-    callTimes = new int[3];
+    callTimes = new long[3];
 }
 
-Task::Task(int taskNum, int availableTime, int * runTimes, int * callTimes) {
+Task::Task(int taskNum, int availableTime, long * runTimes, long * callTimes) {
     this->availableTime = availableTime;
     this->runTimes = runTimes;
     this->callTimes = callTimes;

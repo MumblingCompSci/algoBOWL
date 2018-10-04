@@ -13,7 +13,7 @@ using namespace std;
 
 class Workstation {
 public:
-    int cumulativeTime;
+    long cumulativeTime;
     int currentTaskNum;
     int wsNumber;
     int numTasksPerformed;

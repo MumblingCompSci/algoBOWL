@@ -56,18 +56,18 @@ void InputImporter::loadTasksAndWorkstations(string file_name, vector<Task> &tas
 
         // load the tasks into the array
         for (int x = 0; x < numTasks; x++) {
-            int * times = new int[3];
+            long * times = new long[3];
             getline(inputFile, entry, ' ');
             int availTime = stoi(entry);
             //cout << "Available time: " << availTime << endl << "Times: ";
 
             for (int i = 0; i < numWorkstations - 1; i++) {
                 getline(inputFile, entry, ' ');
-                times[i] = stoi(entry);
+                times[i] = (long) stoi(entry);
                 //cout << times[i] << ' ';
             }
             getline(inputFile, entry);
-            times[2] = stoi(entry);
+            times[2] = (long) stoi(entry);
             //cout << times[2] << endl;
 
             Task task = Task(x, availTime, times);

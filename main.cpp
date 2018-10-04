@@ -18,7 +18,7 @@ void addToWorkstations(Task taskToAdd, Workstation ws[]);
 bool checkForOverlap(int taskNumCheck, Workstation ws[]);
 
 const int NUM_WORKSTATIONS = 3;
-int currentTime = 0;
+long currentTime = 0;
 
 const string randomInputFileName = "../randomInput.txt";
 
@@ -93,7 +93,7 @@ int main() {
             currentTime++;
         }
 
-        int totalTime = 0;
+        long totalTime = 0;
         for(int i = 0; i < NUM_WORKSTATIONS; i++) {
             if(workstationArray[i].cumulativeTime > totalTime) {
                 totalTime = workstationArray[i].cumulativeTime;

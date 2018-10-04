@@ -40,26 +40,26 @@ int OutputImporter::loadTasksAndWorkstations(string inFile_name, string outFile_
 
         // load the tasks into the array
         for (int x = 0; x < numTasks; x++) {
-            int * runTimes = new int[3];
+            long * runTimes = new long[3];
             getline(inputFile, entry, ' ');
             int availTime = stoi(entry);
 
             for (int i = 0; i < numWorkstations - 1; i++) {
                 getline(inputFile, entry, ' ');
-                runTimes[i] = stoi(entry);
+                runTimes[i] = (long) stoi(entry);
             }
             getline(inputFile, entry);
-            runTimes[2] = stoi(entry);
+            runTimes[2] = (long) stoi(entry);
 
-            int * callTimes = new int[3];
+            long * callTimes = new long[3];
 
             // call times
             for (int i = 0; i < numWorkstations - 1; i++) {
                 getline(outputFile, entry, ' ');
-                callTimes[i] = stoi(entry);
+                callTimes[i] = (long) stoi(entry);
             }
             getline(outputFile, entry);
-            callTimes[2] = stoi(entry);
+            callTimes[2] = (long) stoi(entry);
 
             Task task = Task(x, availTime, runTimes, callTimes);
             tasks_vector.push_back(task);
